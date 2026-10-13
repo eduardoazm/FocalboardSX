@@ -20,7 +20,7 @@ import {useAppDispatch, useAppSelector} from '../../store/hooks'
 import TelemetryClient, {TelemetryActions, TelemetryCategory} from '../../telemetry/telemetryClient'
 
 import './boardTemplateSelector.scss'
-import {OnboardingBoardTitle} from '../cardDetail/cardDetail'
+import {OnboardingBoardTitle, OnboardingBoardTitlePT} from '../cardDetail/cardDetail'
 import {IUser, UserConfigPatch} from '../../user'
 import {getMe, patchProps} from '../../store/users'
 import {BaseTourSteps, TOUR_BASE} from '../onboardingTour'
@@ -110,7 +110,7 @@ const BoardTemplateSelector = (props: Props) => {
         const boardsAndBlocks = await mutator.addBoardFromTemplate(currentTeam?.id || Constants.globalTeamId, intl, showBoard, () => showBoard(currentBoardId), activeTemplate.id, currentTeam?.id)
         const board = boardsAndBlocks.boards[0]
         await mutator.updateBoard({...board, channelId: props.channelId || ''}, board, 'linked channel')
-        if (activeTemplate.title === OnboardingBoardTitle) {
+        if (activeTemplate.title === OnboardingBoardTitle || activeTemplate.title === OnboardingBoardTitlePT) {
             resetTour()
         }
     }

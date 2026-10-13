@@ -1,7 +1,7 @@
 # 🚀 FocalboardSX
 
 [![Docker Build & Publish](https://github.com/eduardoazm/FocalboardSX/actions/workflows/docker-build.yml/badge.svg)](https://github.com/eduardoazm/FocalboardSX/actions/workflows/docker-build.yml)
-[![Version](https://img.shields.io/badge/version-v1.0.1-blue.svg)](https://github.com/eduardoazm/FocalboardSX/releases)
+[![Version](https://img.shields.io/badge/version-v1.0.2-blue.svg)](https://github.com/eduardoazm/FocalboardSX/releases)
 [![Language](https://img.shields.io/badge/language-pt--BR-green.svg)](https://github.com/eduardoazm/FocalboardSX)
 [![Docker Image](https://img.shields.io/badge/docker-ghcr.io-blue?logo=docker)](https://github.com/eduardoazm/FocalboardSX/pkgs/container/focalboardsx)
 

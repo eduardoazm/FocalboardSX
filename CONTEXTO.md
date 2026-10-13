@@ -13,7 +13,7 @@
 * **Nome do Projeto**: FocalboardSX (Sistema Integrado de Gestão de Quadros, Tarefas e Projetos)
 * **Repositório Git**: `https://github.com/eduardoazm/FocalboardSX.git`
 * **Imagem Docker Pré-compilada**: `ghcr.io/eduardoazm/focalboardsx:latest`
-* **Versão Atual**: `v1.0.1`
+* **Versão Atual**: `v1.0.2`
 * **Tecnologias Principais**: Go 1.20 (Backend HTTP/WebSocket REST), React 17, TypeScript 4, Redux Toolkit, SCSS, SQLite3 (nativo em `/opt/focalboard/data`) / PostgreSQL opcional, Docker (Multi-stage build), GitHub Actions CI/CD (GHCR), Portainer.
 
 ### Propósito & Escopo de Negócio
@@ -29,6 +29,19 @@ Diferenciais e melhorias implementadas:
 ---
 
 ## 🕒 2. Histórico Completo de Versões e Evolução do Projeto
+
+### `v1.0.2` — Localização Total de Modelos (Templates), Quadros e Barra Lateral em PT-BR
+* **Tradução Completa dos 13 Modelos Nativos (`templates-boardarchive`)**:
+  * Tradução dos títulos, descrições, visualizações, propriedades, colunas de status e cartões de todos os 13 modelos embutidos (`Tarefas do Projeto`, `Bem-vindo ao Focalboard!`, `Pauta de Reunião`, `Pipeline de Vendas (CRM)`, `Tarefas Pessoais`, `Metas e OKRs da Empresa`, `Metas Pessoais`, `Planejamento de Sprint`, `Sessões de Pesquisa com Usuários`, `Análise Concorrencial`, `Calendário de Conteúdo`, `Retrospectiva da Equipe` e `Roadmap de Produto`).
+  * Tradução das colunas de Status (*Não iniciado*, *Em andamento*, *Bloqueado*, *Concluído 🙌*, *Arquivado*, etc.) e prioridades (*Alta 🔥*, *Média*, *Baixa*).
+  * Recompilação do pacote embutido `server/assets/templates.boardarchive` e incremento de `defaultTemplateVersion` para `7` em `server/app/templates.go`, forçando a reimportação automática dos novos modelos em português no boot.
+* **Barra Lateral e Categorias (Sidebar)**:
+  * Localização do cabeçalho da categoria padrão de `BOARDS` para `QUADROS` em `webapp/src/store/sidebar.ts` e `webapp/src/components/sidebar/sidebarCategory.tsx`.
+* **Compatibilidade e Internacionalização**:
+  * Suporte a nomes em português no tour inicial (`Bem-vindo ao Focalboard!` e `Criar um novo cartão`) no backend (`server/app/onboarding.go`) e frontend (`cardDetail.tsx`, `tourTipRenderer.tsx`, `add_properties.tsx`, `viewHeader.tsx`).
+  * Inclusão de novas chaves de tradução em `webapp/i18n/pt_BR.json`.
+* **Build Docker**:
+  * Inclusão de `make templates-archive` no Dockerfile para garantir que o pacote de modelos seja sempre reempacotado durante o build.
 
 ### `v1.0.1` — Tema Adaptativo e Melhorias Visuais na Tela de Usuários
 * **Adequação ao Sistema de Temas do Focalboard**:
@@ -185,4 +198,4 @@ git config user.email "eduardo.azm@hotmail.com"
 
 ---
 
-*Documento atualizado em: 13 de Outubro de 2026 — Versão v1.0.1*
+*Documento atualizado em: 13 de Outubro de 2026 — Versão v1.0.2*

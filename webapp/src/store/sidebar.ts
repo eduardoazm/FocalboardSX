@@ -47,7 +47,7 @@ interface CategoryBoardsReorderData {
 
 export const DefaultCategory: CategoryBoards = {
     id: '',
-    name: 'Boards',
+    name: 'Quadros',
 } as CategoryBoards
 
 export const fetchSidebarCategories = createAsyncThunk(

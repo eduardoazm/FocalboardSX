@@ -12,7 +12,7 @@ import addProperty from '../../../../static/addProperty.gif'
 
 import {BaseTourSteps, CardTourSteps, TOUR_BASE, TOUR_CARD} from '../index'
 import TourTipRenderer from '../tourTipRenderer/tourTipRenderer'
-import {OnboardingBoardTitle, OnboardingCardTitle} from '../../cardDetail/cardDetail'
+import {OnboardingBoardTitle, OnboardingBoardTitlePT, OnboardingCardTitle, OnboardingCardTitlePT} from '../../cardDetail/cardDetail'
 import {useAppDispatch, useAppSelector} from '../../../store/hooks'
 import {
     getMe,
@@ -46,10 +46,10 @@ const AddPropertiesTourStep = (): JSX.Element | null => {
     const dispatch = useAppDispatch()
 
     const board = useAppSelector(getCurrentBoard)
-    const isOnboardingBoard = board ? board.title === OnboardingBoardTitle : false
+    const isOnboardingBoard = board ? (board.title === OnboardingBoardTitle || board.title === OnboardingBoardTitlePT) : false
 
     const card = useAppSelector(getCurrentCard)
-    const isOnboardingCard = card ? card.title === OnboardingCardTitle : false
+    const isOnboardingCard = card ? (card.title === OnboardingCardTitle || card.title === OnboardingCardTitlePT) : false
 
     const onboardingTourStarted = useAppSelector(getOnboardingTourStarted)
     const onboardingTourCategory = useAppSelector(getOnboardingTourCategory)

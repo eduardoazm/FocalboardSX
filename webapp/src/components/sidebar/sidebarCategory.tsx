@@ -68,6 +68,8 @@ const SidebarCategory = (props: Props) => {
     const intl = useIntl()
     const history = useHistory()
 
+    const categoryDisplayName = (!props.categoryBoards.id || props.categoryBoards.name.toLowerCase() === 'boards') ? intl.formatMessage({id: 'Sidebar.category.boards', defaultMessage: 'Quadros'}) : props.categoryBoards.name
+
     const [deleteBoard, setDeleteBoard] = useState<Board|null>()
     const [showDeleteCategoryDialog, setShowDeleteCategoryDialog] = useState<boolean>(false)
     const [categoryMenuOpen, setCategoryMenuOpen] = useState<boolean>(false)
@@ -165,7 +167,7 @@ const SidebarCategory = (props: Props) => {
                 defaultMessage: 'Boards in <b>{categoryName}</b> will move back to the Boards categories. You\'re not removed from any boards.',
             },
             {
-                categoryName: props.categoryBoards.name,
+                categoryName: categoryDisplayName,
                 b: (...chunks) => <b>{chunks}</b>,
             },
         ),
@@ -290,12 +292,12 @@ const SidebarCategory = (props: Props) => {
                                         >
                                             <div
                                                 className='octo-sidebar-title category-title'
-                                                title={props.categoryBoards.name}
+                                                title={categoryDisplayName}
                                                 onClick={toggleCollapse}
                                                 {...provided.dragHandleProps}
                                             >
                                                 {collapsed || snapshot.isDragging || props.forceCollapse ? <ChevronRight/> : <ChevronDown/>}
-                                                {props.categoryBoards.name}
+                                                {categoryDisplayName}
                                                 <div className='sidebarCategoriesTour'>
                                                     {props.index === 0 && shouldViewSidebarTour && <SidebarCategoriesTourStep/>}
                                                 </div>

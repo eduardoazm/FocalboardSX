@@ -14,7 +14,8 @@ const (
 	ValueOnboardingFirstStep    = "0"
 	ValueTourCategoryOnboarding = "onboarding"
 
-	WelcomeBoardTitle = "Welcome to Boards!"
+	WelcomeBoardTitle   = "Welcome to Boards!"
+	WelcomeBoardTitlePT = "Bem-vindo ao Focalboard!"
 )
 
 var (
@@ -52,7 +53,7 @@ func (a *App) getOnboardingBoardID() (string, error) {
 
 	var onboardingBoardID string
 	for _, block := range boards {
-		if block.Title == WelcomeBoardTitle && block.TeamID == model.GlobalTeamID {
+		if (block.Title == WelcomeBoardTitle || block.Title == WelcomeBoardTitlePT) && block.TeamID == model.GlobalTeamID {
 			onboardingBoardID = block.ID
 			break
 		}

@@ -251,6 +251,8 @@
   "ShareTemplate.Title": "Compartilhar modelo",
   "ShareTemplate.searchPlaceholder": "Busca por pessoas",
   "Sidebar.about": "Sobre o Focalboard",
+  "Sidebar.adminUsers": "Gerenciar Usuários",
+  "Sidebar.category.boards": "Quadros",
   "Sidebar.add-board": "+ Adicionar quadro",
   "Sidebar.changePassword": "Mudar senha",
   "Sidebar.delete-board": "Excluir quadro",

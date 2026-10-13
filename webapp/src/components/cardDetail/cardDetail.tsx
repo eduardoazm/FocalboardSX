@@ -45,7 +45,9 @@ import AttachmentList from './attachment'
 import './cardDetail.scss'
 
 export const OnboardingBoardTitle = 'Welcome to Boards!'
+export const OnboardingBoardTitlePT = 'Bem-vindo ao Focalboard!'
 export const OnboardingCardTitle = 'Create a new card'
+export const OnboardingCardTitlePT = 'Criar um novo cartão'
 
 type Props = {
     board: Board
