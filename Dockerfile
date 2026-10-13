@@ -1,14 +1,14 @@
 # syntax=docker/dockerfile:1
 
 ### 1. Build Webapp
-FROM node:16-bullseye AS nodebuild
+FROM node:18-bookworm AS nodebuild
 
 WORKDIR /webapp
 
 # Copy package manifests first for optimal layer caching
 COPY webapp/package.json webapp/package-lock.json* ./
 
-# Install dependencies avoiding npm7+ peer dependency issues
+# Install dependencies avoiding npm peer dependency conflicts
 RUN CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm install --legacy-peer-deps --no-optional
 
 # Copy source and build webapp bundle
@@ -16,7 +16,7 @@ COPY webapp/ ./
 RUN npm run pack
 
 ### 2. Build Go Server
-FROM golang:1.20-bullseye AS gobuild
+FROM golang:1.21-bookworm AS gobuild
 
 WORKDIR /go/src/focalboard
 COPY . /go/src/focalboard
@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends gcc libc6-dev m
 RUN EXCLUDE_PLUGIN=true EXCLUDE_SERVER=true EXCLUDE_ENTERPRISE=true make server-docker os=${TARGETOS} arch=${TARGETARCH}
 
 ### 3. Final Production Image
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates tzdata && rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /opt/focalboard/data/files && \
