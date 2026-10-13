@@ -425,7 +425,7 @@ const AdminUsersPage: React.FC = () => {
             {/* Modal: Novo Usuário */}
             {showCreateModal && (
                 <Dialog
-                    size='medium'
+                    className='AdminDialog'
                     onClose={() => setShowCreateModal(false)}
                     title={<span>Cadastrar Novo Usuário</span>}
                 >
@@ -515,7 +515,7 @@ const AdminUsersPage: React.FC = () => {
             {/* Modal: Editar Usuário */}
             {editingUser && (
                 <Dialog
-                    size='medium'
+                    className='AdminDialog'
                     onClose={() => setEditingUser(null)}
                     title={<span>Editar Usuário: {editingUser.username}</span>}
                 >
@@ -597,7 +597,7 @@ const AdminUsersPage: React.FC = () => {
             {/* Modal: Redefinir Senha */}
             {resetUser && (
                 <Dialog
-                    size='small'
+                    className='AdminDialog'
                     onClose={() => setResetUser(null)}
                     title={<span>Redefinir Senha</span>}
                 >
@@ -663,7 +663,7 @@ const AdminUsersPage: React.FC = () => {
             {/* Modal: Excluir Usuário */}
             {deletingUser && (
                 <Dialog
-                    size='small'
+                    className='AdminDialog'
                     onClose={() => setDeletingUser(null)}
                     title={<span>Confirmar Exclusão</span>}
                 >

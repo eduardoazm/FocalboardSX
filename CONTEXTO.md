@@ -13,7 +13,7 @@
 * **Nome do Projeto**: FocalboardSX (Sistema Integrado de Gestão de Quadros, Tarefas e Projetos)
 * **Repositório Git**: `https://github.com/eduardoazm/FocalboardSX.git`
 * **Imagem Docker Pré-compilada**: `ghcr.io/eduardoazm/focalboardsx:latest`
-* **Versão Atual**: `v1.0.0`
+* **Versão Atual**: `v1.0.1`
 * **Tecnologias Principais**: Go 1.20 (Backend HTTP/WebSocket REST), React 17, TypeScript 4, Redux Toolkit, SCSS, SQLite3 (nativo em `/opt/focalboard/data`) / PostgreSQL opcional, Docker (Multi-stage build), GitHub Actions CI/CD (GHCR), Portainer.
 
 ### Propósito & Escopo de Negócio
@@ -29,6 +29,19 @@ Diferenciais e melhorias implementadas:
 ---
 
 ## 🕒 2. Histórico Completo de Versões e Evolução do Projeto
+
+### `v1.0.1` — Tema Adaptativo e Melhorias Visuais na Tela de Usuários
+* **Adequação ao Sistema de Temas do Focalboard**:
+  * Substituição de cores fixas/hardcoded em `webapp/src/pages/adminUsersPage.scss` por variáveis CSS dinâmicas nativas do Focalboard (`--center-channel-bg-rgb`, `--center-channel-color-rgb`, `--button-bg-rgb`, etc.).
+  * Suporte automático e harmônico a temas claro, escuro e personalizados.
+* **Correção de Contraste e Legibilidade**:
+  * Ajuste de textos de descrição, labels, placeholders e dicas no formulário para manter legibilidade total em fundos escuros e claros.
+  * Inputs e selects agora utilizam transparências dinâmicas sobre `--center-channel-color-rgb` e fundo adaptativo no foco.
+* **Ajuste Dimensional dos Modais Administrativos**:
+  * Aplicação da classe customizada `.AdminDialog` aos 4 modais administrativos (Criar Usuário, Editar Usuário, Redefinir Senha e Excluir Usuário).
+  * Limitação de tamanho para proporções compactas (`max-width: 520px; height: auto`), eliminando espaços pretos/vazios excessivos e garantindo uma interface limpa e centralizada.
+* **Sincronização de Versão**:
+  * Atualização coordenada em `webapp/package.json`, `webapp/src/constants.ts`, `server/model/version.go`, `README.md` e `CONTEXTO.md`.
 
 ### `v1.0.0` — Fundação, Localização PT-BR, Painel Admin CRUD & Pipeline Portainer
 * **Tradução Completa e Persistência de Idioma**:
@@ -172,4 +185,4 @@ git config user.email "eduardo.azm@hotmail.com"
 
 ---
 
-*Documento atualizado em: 13 de Outubro de 2026 — Versão v1.0.0*
+*Documento atualizado em: 13 de Outubro de 2026 — Versão v1.0.1*
