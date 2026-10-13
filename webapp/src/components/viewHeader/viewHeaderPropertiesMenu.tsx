@@ -4,6 +4,7 @@ import React from 'react'
 import {FormattedMessage, useIntl} from 'react-intl'
 
 import {Constants} from '../../constants'
+import {Utils} from '../../utils'
 import {IPropertyTemplate} from '../../blocks/board'
 import {BoardView} from '../../blocks/boardView'
 import mutator from '../../mutator'
@@ -53,7 +54,7 @@ const ViewHeaderPropertiesMenu = (props: Props) => {
                     <Menu.Switch
                         key={option.id}
                         id={option.id}
-                        name={option.name}
+                        name={Utils.localizePropertyName(option.name, intl)}
                         isOn={visiblePropertyIds.includes(option.id)}
                         suppressItemClicked={true}
                         onClick={toggleVisibility}

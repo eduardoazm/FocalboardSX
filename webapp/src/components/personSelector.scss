@@ -1,19 +1,24 @@
-.Person {
+.Person,
+.MultiPerson {
     display: flex;
     align-items: center;
     border-radius: 4px;
     flex-wrap: wrap;
     gap: 8px;
+    color: rgb(var(--center-channel-color-rgb));
 
     &.readonly {
         overflow: hidden;
         text-overflow: ellipsis;
         min-width: unset;
+        color: rgb(var(--center-channel-color-rgb));
     }
 
-    .Person-item {
+    .Person-item,
+    .MultiPerson-item {
         display: flex;
         align-items: center;
+        color: rgb(var(--center-channel-color-rgb)) !important;
 
         img {
             border-radius: 50px;
@@ -21,6 +26,11 @@
             height: 24px;
             margin-right: 6px;
         }
+    }
+
+    .react-select__control {
+        background: transparent;
+        color: rgb(var(--center-channel-color-rgb));
     }
 
     .react-select__menu {
@@ -35,6 +45,7 @@
         position: relative;
         top: 0;
         max-width: 100%;
+        color: rgb(var(--center-channel-color-rgb)) !important;
     }
 
     .react-select__value-container--is-multi {

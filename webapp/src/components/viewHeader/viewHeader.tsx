@@ -13,6 +13,7 @@ import IconButton from '../../widgets/buttons/iconButton'
 import DropdownIcon from '../../widgets/icons/dropdown'
 import MenuWrapper from '../../widgets/menuWrapper'
 import Editable from '../../widgets/editable'
+import {Utils} from '../../utils'
 
 import ModalWrapper from '../modalWrapper'
 
@@ -118,7 +119,7 @@ const ViewHeader = (props: Props) => {
             <div className='viewSelector'>
                 <Editable
                     value={viewTitle}
-                    placeholderText='Untitled View'
+                    placeholderText={intl.formatMessage({id: 'ViewHeader.untitled-view', defaultMessage: 'Visualização sem título'})}
                     onSave={(): void => {
                         mutator.changeBlockTitle(activeView.boardId, activeView.id, activeView.title, viewTitle)
                     }}
@@ -172,7 +173,7 @@ const ViewHeader = (props: Props) => {
                 <ViewHeaderDisplayByMenu
                     properties={board.cardProperties}
                     activeView={activeView}
-                    dateDisplayPropertyName={dateDisplayProperty?.name}
+                    dateDisplayPropertyName={Utils.localizePropertyName(dateDisplayProperty?.name || '', intl)}
                 />}
 
                 {/* Filter */}

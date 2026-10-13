@@ -32,10 +32,10 @@ const FilterEntry = (props: Props): JSX.Element => {
 
     const template = board.cardProperties.find((o: IPropertyTemplate) => o.id === filter.propertyId)
     let propertyType = propsRegistry.get(template?.type || 'unknown')
-    let propertyName = template ? template.name : '(unknown)'
+    let propertyName = template ? Utils.localizePropertyName(template.name, intl) : '(unknown)'
     if (filter.propertyId === 'title') {
         propertyType = propsRegistry.get('text')
-        propertyName = 'Title'
+        propertyName = intl.formatMessage({id: 'FilterEntry.title', defaultMessage: 'Título'})
     }
     const key = `${filter.propertyId}-${filter.condition}}`
     return (
@@ -49,7 +49,7 @@ const FilterEntry = (props: Props): JSX.Element => {
                     <Menu.Text
                         key={'title'}
                         id={'title'}
-                        name={'Title'}
+                        name={intl.formatMessage({id: 'FilterEntry.title', defaultMessage: 'Título'})}
                         onClick={(optionId: string) => {
                             const filterIndex = view.fields.filter.filters.indexOf(filter)
                             Utils.assert(filterIndex >= 0, "Can't find filter")
@@ -67,7 +67,7 @@ const FilterEntry = (props: Props): JSX.Element => {
                         <Menu.Text
                             key={o.id}
                             id={o.id}
-                            name={o.name}
+                            name={Utils.localizePropertyName(o.name, intl)}
                             onClick={(optionId: string) => {
                                 const filterIndex = view.fields.filter.filters.indexOf(filter)
                                 Utils.assert(filterIndex >= 0, "Can't find filter")

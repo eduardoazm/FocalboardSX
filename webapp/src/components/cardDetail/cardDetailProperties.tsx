@@ -136,13 +136,13 @@ const CardDetailProperties = (props: Props) => {
                         key={propertyTemplate.id + '-' + propertyTemplate.type}
                         className='octo-propertyrow'
                     >
-                        {(props.readonly || !canEditBoardProperties) && <div className='octo-propertyname octo-propertyname--readonly'>{propertyTemplate.name}</div>}
+                        {(props.readonly || !canEditBoardProperties) && <div className='octo-propertyname octo-propertyname--readonly'>{Utils.localizePropertyName(propertyTemplate.name, intl)}</div>}
                         {!props.readonly && canEditBoardProperties &&
                             <MenuWrapper isOpen={propertyTemplate.id === newTemplateId}>
-                                <div className='octo-propertyname'><Button>{propertyTemplate.name}</Button></div>
+                                <div className='octo-propertyname'><Button>{Utils.localizePropertyName(propertyTemplate.name, intl)}</Button></div>
                                 <PropertyMenu
                                     propertyId={propertyTemplate.id}
-                                    propertyName={propertyTemplate.name}
+                                    propertyName={Utils.localizePropertyName(propertyTemplate.name, intl)}
                                     propertyType={propRegistry.get(propertyTemplate.type)}
                                     onTypeAndNameChanged={(newType: PropertyType, newName: string) => onPropertyChangeSetAndOpenConfirmationDialog(newType, newName, propertyTemplate)}
                                     onDelete={() => onPropertyDeleteSetAndOpenConfirmationDialog(propertyTemplate)}

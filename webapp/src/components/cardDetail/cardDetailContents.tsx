@@ -190,7 +190,7 @@ const CardDetailContents = (props: Props) => {
                     <MarkdownEditor
                         id={id}
                         text=''
-                        placeholderText='Add a description...'
+                        placeholderText={intl.formatMessage({id: 'CardDetail.add-description', defaultMessage: 'Adicionar uma descrição...'})}
                         onBlur={(text) => {
                             if (text) {
                                 addTextBlock(card, intl, text)

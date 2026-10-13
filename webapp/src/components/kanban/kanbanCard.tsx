@@ -133,7 +133,7 @@ const KanbanCard = (props: Props) => {
                 {visiblePropertyTemplates.map((template) => (
                     <Tooltip
                         key={template.id}
-                        title={template.name}
+                        title={Utils.localizePropertyName(template.name, intl)}
                     >
                         <PropertyValueElement
                             board={board}

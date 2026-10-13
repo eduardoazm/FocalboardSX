@@ -138,7 +138,7 @@ const TableHeaders = (props: Props): JSX.Element => {
                 }
                 return (
                     <TableHeader
-                        name={template.name}
+                        name={Utils.localizePropertyName(template.name, intl)}
                         sorted={sorted}
                         readonly={props.readonly}
                         board={board}

@@ -60,6 +60,15 @@ const selectStyles = {
         position: 'static',
         top: 'unset',
         transform: 'unset',
+        color: 'rgb(var(--center-channel-color-rgb))',
+    }),
+    input: (provided: CSSObject): CSSObject => ({
+        ...provided,
+        color: 'rgb(var(--center-channel-color-rgb))',
+    }),
+    placeholder: (provided: CSSObject): CSSObject => ({
+        ...provided,
+        color: 'rgba(var(--center-channel-color-rgb), 0.4)',
     }),
     menu: (provided: CSSObject): CSSObject => ({
         ...provided,
@@ -93,6 +102,7 @@ const PersonSelector = (props: Props): JSX.Element => {
             <div
                 key={user.id}
                 className={isMulti ? 'MultiPerson-item' : 'Person-item'}
+                style={{color: 'rgb(var(--center-channel-color-rgb))'}}
             >
                 {profileImg && (
                     <img

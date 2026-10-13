@@ -7,6 +7,7 @@ import {FormattedMessage, useIntl} from 'react-intl'
 import {BoardGroup, IPropertyTemplate} from '../../blocks/board'
 import {BoardView} from '../../blocks/boardView'
 import mutator from '../../mutator'
+import {Utils} from '../../utils'
 import Button from '../../widgets/buttons/button'
 import Menu from '../../widgets/menu'
 import MenuWrapper from '../../widgets/menuWrapper'
@@ -59,7 +60,7 @@ const ViewHeaderGroupByMenu = (props: Props) => {
                                 style={{color: 'rgb(var(--center-channel-color-rgb))'}}
                                 id='groupByLabel'
                             >
-                                {groupByProperty?.name}
+                                {Utils.localizePropertyName(groupByProperty?.name || '', intl)}
                             </span>
                         ),
                     }}
@@ -102,7 +103,7 @@ const ViewHeaderGroupByMenu = (props: Props) => {
                     <Menu.Text
                         key={option.id}
                         id={option.id}
-                        name={option.name}
+                        name={Utils.localizePropertyName(option.name, intl)}
                         rightIcon={groupByProperty?.id === option.id ? <CheckIcon/> : undefined}
                         onClick={(id) => {
                             if (activeView.fields.groupById === id) {

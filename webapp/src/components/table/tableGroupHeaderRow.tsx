@@ -9,6 +9,7 @@ import {IPropertyOption, Board, IPropertyTemplate, BoardGroup} from '../../block
 import {BoardView} from '../../blocks/boardView'
 import {useSortable} from '../../hooks/sortable'
 import mutator from '../../mutator'
+import {Utils} from '../../utils'
 import Button from '../../widgets/buttons/button'
 import IconButton from '../../widgets/buttons/iconButton'
 import AddIcon from '../../widgets/icons/add'
@@ -82,13 +83,13 @@ const TableGroupHeaderRow = (props: Props): JSX.Element => {
                         title={intl.formatMessage({
                             id: 'BoardComponent.no-property-title',
                             defaultMessage: 'Items with an empty {property} property will go here. This column cannot be removed.',
-                        }, {property: groupByProperty?.name})}
+                        }, {property: Utils.localizePropertyName(groupByProperty?.name || '', intl)})}
                     >
                         <FormattedMessage
                             id='BoardComponent.no-property'
                             defaultMessage='No {property}'
                             values={{
-                                property: groupByProperty?.name,
+                                property: Utils.localizePropertyName(groupByProperty?.name || '', intl),
                             }}
                         />
                     </Label>}
@@ -100,7 +101,7 @@ const TableGroupHeaderRow = (props: Props): JSX.Element => {
                     <Label color={group.option.color}>
                         <Editable
                             value={groupTitle}
-                            placeholderText='New Select'
+                            placeholderText={intl.formatMessage({id: 'TableGroupHeaderRow.new-select', defaultMessage: 'Nova opção'})}
                             onChange={setGroupTitle}
                             onSave={() => {
                                 if (groupTitle.trim() === '') {

@@ -817,6 +817,68 @@ class Utils {
     static isAdmin(roles: string): boolean {
         return Utils.isSystemAdmin(roles) || Utils.isTeamAdmin(roles)
     }
+
+    static localizePropertyName(name: string, intl?: IntlShape): string {
+        if (!name) {
+            return name
+        }
+        const trimmed = name.trim()
+        const mapping: Record<string, string> = {
+            'Priority': 'Prioridade',
+            'priority': 'Prioridade',
+            'Assignee': 'Responsável',
+            'assignee': 'Responsável',
+            'Estimated Hours': 'Horas Estimadas',
+            'estimated hours': 'Horas Estimadas',
+            'Estimated hours': 'Horas Estimadas',
+            'Due Date': 'Data de Entrega',
+            'due date': 'Data de Entrega',
+            'Due date': 'Data de Entrega',
+            'Created By': 'Criado por',
+            'created by': 'Criado por',
+            'Created by': 'Criado por',
+            'Date Created': 'Data de Criação',
+            'date created': 'Data de Criação',
+            'Date created': 'Data de Criação',
+            'Last Updated By': 'Última atualização por',
+            'last updated by': 'Última atualização por',
+            'Last updated by': 'Última atualização por',
+            'Date Updated': 'Data de atualização',
+            'date updated': 'Data de atualização',
+            'Date updated': 'Data de atualização',
+            'Last updated time': 'Última atualização',
+            'last updated time': 'Última atualização',
+            'Status': 'Status',
+            'status': 'Status',
+            'Description': 'Descrição',
+            'description': 'Descrição',
+            'Comments': 'Comentários',
+            'comments': 'Comentários',
+            'Title': 'Título',
+            'title': 'Título',
+            'Name': 'Nome',
+            'name': 'Nome',
+            'Progress': 'Progresso',
+            'progress': 'Progresso',
+            'Start Date': 'Data de Início',
+            'start date': 'Data de Início',
+            'End Date': 'Data de Término',
+            'end date': 'Data de Término',
+            'Owner': 'Proprietário',
+            'owner': 'Proprietário',
+            'Tags': 'Etiquetas',
+            'tags': 'Etiquetas',
+            'Category': 'Categoria',
+            'category': 'Categoria',
+            'Type': 'Tipo',
+            'type': 'Tipo',
+            'Milestone': 'Marco',
+            'milestone': 'Marco',
+            'Platform': 'Plataforma',
+            'platform': 'Plataforma',
+        }
+        return mapping[trimmed] || name
+    }
 }
 
 export {Utils, IDType}

@@ -9,6 +9,7 @@ import {DatePropertyType} from '../../properties/types'
 import {IPropertyTemplate} from '../../blocks/board'
 import {BoardView} from '../../blocks/boardView'
 import mutator from '../../mutator'
+import {Utils} from '../../utils'
 import Button from '../../widgets/buttons/button'
 import Menu from '../../widgets/menu'
 import MenuWrapper from '../../widgets/menuWrapper'
@@ -55,7 +56,7 @@ const ViewHeaderDisplayByMenu = (props: Props) => {
                     <Menu.Text
                         key={date.id}
                         id={date.id}
-                        name={date.name}
+                        name={Utils.localizePropertyName(date.name, intl)}
                         rightIcon={activeView.fields.dateDisplayPropertyId === date.id ? <CheckIcon/> : undefined}
                         onClick={(id) => {
                             if (activeView.fields.dateDisplayPropertyId === id) {

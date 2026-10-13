@@ -1,13 +1,14 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 import React, {useCallback} from 'react'
-import {FormattedMessage} from 'react-intl'
+import {FormattedMessage, useIntl} from 'react-intl'
 
 import {IPropertyTemplate} from '../../blocks/board'
 import {BoardView, ISortOption} from '../../blocks/boardView'
 import {Constants} from '../../constants'
 import {Card} from '../../blocks/card'
 import mutator from '../../mutator'
+import {Utils} from '../../utils'
 import Button from '../../widgets/buttons/button'
 import Menu from '../../widgets/menu'
 import MenuWrapper from '../../widgets/menuWrapper'
@@ -21,9 +22,10 @@ type Props = {
 }
 const ViewHeaderSortMenu = (props: Props) => {
     const {properties, activeView, orderedCards} = props
+    const intl = useIntl()
     const hasSort = activeView.fields.sortOptions?.length > 0
     const sortDisplayOptions = properties?.map((o) => ({id: o.id, name: o.name}))
-    sortDisplayOptions?.unshift({id: Constants.titleColumnId, name: 'Name'})
+    sortDisplayOptions?.unshift({id: Constants.titleColumnId, name: intl.formatMessage({id: 'ViewHeader.sort-name', defaultMessage: 'Nome'})})
 
     const sortChanged = useCallback((propertyId: string) => {
         let newSortOptions: ISortOption[] = []
@@ -66,13 +68,13 @@ const ViewHeaderSortMenu = (props: Props) => {
                 <>
                     <Menu.Text
                         id='manual'
-                        name='Manual'
+                        name={intl.formatMessage({id: 'ViewHeader.sort-manual', defaultMessage: 'Manual'})}
                         onClick={onManualSort}
                     />
 
                     <Menu.Text
                         id='revert'
-                        name='Revert'
+                        name={intl.formatMessage({id: 'ViewHeader.sort-revert', defaultMessage: 'Reverter'})}
                         onClick={onRevertSort}
                     />
 
@@ -92,7 +94,7 @@ const ViewHeaderSortMenu = (props: Props) => {
                         <Menu.Text
                             key={option.id}
                             id={option.id}
-                            name={option.name}
+                            name={Utils.localizePropertyName(option.name, intl)}
                             rightIcon={rightIcon}
                             onClick={sortChanged}
                         />

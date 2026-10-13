@@ -10,6 +10,7 @@ import {IPropertyOption, IPropertyTemplate, Board, BoardGroup} from '../../block
 import {BoardView} from '../../blocks/boardView'
 import {Card} from '../../blocks/card'
 import mutator from '../../mutator'
+import {Utils} from '../../utils'
 import IconButton from '../../widgets/buttons/iconButton'
 import AddIcon from '../../widgets/icons/add'
 import DeleteIcon from '../../widgets/icons/delete'
@@ -99,13 +100,13 @@ export default function KanbanColumnHeader(props: Props): JSX.Element {
                     title={intl.formatMessage({
                         id: 'BoardComponent.no-property-title',
                         defaultMessage: 'Items with an empty {property} property will go here. This column cannot be removed.',
-                    }, {property: groupByProperty!.name})}
+                    }, {property: Utils.localizePropertyName(groupByProperty!.name, intl)})}
                 >
                     <FormattedMessage
                         id='BoardComponent.no-property'
                         defaultMessage='No {property}'
                         values={{
-                            property: groupByProperty!.name,
+                            property: Utils.localizePropertyName(groupByProperty!.name, intl),
                         }}
                     />
                 </Label>}
@@ -117,7 +118,7 @@ export default function KanbanColumnHeader(props: Props): JSX.Element {
                 <Label color={group.option.color}>
                     <Editable
                         value={groupTitle}
-                        placeholderText='New Select'
+                        placeholderText={intl.formatMessage({id: 'KanbanColumnHeader.new-select', defaultMessage: 'Nova opção'})}
                         onChange={setGroupTitle}
                         onSave={() => {
                             if (groupTitle.trim() === '') {

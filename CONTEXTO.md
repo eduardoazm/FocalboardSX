@@ -13,7 +13,7 @@
 * **Nome do Projeto**: FocalboardSX (Sistema Integrado de Gestão de Quadros, Tarefas e Projetos)
 * **Repositório Git**: `https://github.com/eduardoazm/FocalboardSX.git`
 * **Imagem Docker Pré-compilada**: `ghcr.io/eduardoazm/focalboardsx:latest`
-* **Versão Atual**: `v1.0.2`
+* **Versão Atual**: `v1.0.3`
 * **Tecnologias Principais**: Go 1.20 (Backend HTTP/WebSocket REST), React 17, TypeScript 4, Redux Toolkit, SCSS, SQLite3 (nativo em `/opt/focalboard/data`) / PostgreSQL opcional, Docker (Multi-stage build), GitHub Actions CI/CD (GHCR), Portainer.
 
 ### Propósito & Escopo de Negócio
@@ -29,6 +29,27 @@ Diferenciais e melhorias implementadas:
 ---
 
 ## 🕒 2. Histórico Completo de Versões e Evolução do Projeto
+
+### `v1.0.3` — Correção de Contraste no Campo Assignee e Localização Dinâmica de Propriedades e Placeholders para PT-BR
+* **Correção de Contraste do Campo Assignee (PersonSelector) no Tema Escuro**:
+  * Adicionado `color: 'rgb(var(--center-channel-color-rgb))'` no estilo `singleValue`, `input` e `placeholder` de `webapp/src/components/personSelector.tsx`.
+  * Adicionada cor inline adaptativa no componente de renderização de opções (`formatOptionLabel`).
+  * Estilizados `.react-select__single-value`, `.Person-item`, `.MultiPerson-item` e `.react-select__control` em `webapp/src/components/personSelector.scss` com `color: rgb(var(--center-channel-color-rgb)) !important`, eliminando o texto escuro sobre fundo escuro.
+* **Localização Dinâmica de Nomes de Propriedades em Quadros Existentes e Novos**:
+  * Criação do helper `Utils.localizePropertyName(name, intl)` em `webapp/src/utils.ts`.
+  * Tradução automática e dinâmica dos rótulos de propriedades de quadros existentes (`Priority` -> *Prioridade*, `Assignee` -> *Responsável*, `Estimated Hours` -> *Horas Estimadas*, `Due Date` -> *Data de Entrega*, `Created By` -> *Criado por*, `Date Created` -> *Data de Criação*, `Last Updated By` -> *Última atualização por*, `Date Updated` -> *Data de atualização*, etc.).
+  * Aplicado em: detalhes do cartão (`cardDetailProperties.tsx`), cabeçalhos da tabela (`tableHeaders.tsx`), tooltips de cartões kanban (`kanbanCard.tsx`), cabeçalhos de coluna (`kanbanColumnHeader.tsx`), menus de agrupamento (`viewHeaderGroupByMenu.tsx`), menus de ordenação (`viewHeaderSortMenu.tsx`), menus de propriedades (`viewHeaderPropertiesMenu.tsx`), menus de exibição por data (`viewHeaderDisplayByMenu.tsx`) e filtros (`filterEntry.tsx`).
+* **Tradução Completa de Placeholders Hardcoded em Toda a Interface**:
+  * Título do cartão vazio em `cardDetail.tsx` e `tableRow.tsx`: de `"Untitled"` para `intl.formatMessage` (*"Sem nome"*).
+  * Descrição do cartão em `cardDetailContents.tsx`: de `"Add a description..."` para *"Adicionar uma descrição..."*.
+  * Descrição do quadro em `viewTitle.tsx`: de `"Add a description..."` para *"Adicionar uma descrição..."*.
+  * Título de visualização em `viewHeader.tsx`: de `"Untitled View"` para *"Visualização sem título"*.
+  * Cabeçalho de novo select em `kanbanColumnHeader.tsx` e `tableGroupHeaderRow.tsx`: de `"New Select"` para *"Nova opção"*.
+  * Opções de ordenação em `viewHeaderSortMenu.tsx`: *"Nome"*, *"Manual"*, *"Reverter"*.
+  * Campo de busca em `searchDialog.tsx`: de `"Search for boards"` para *"Pesquisar quadros"*.
+  * Opções de cálculos de tabela e kanban em `options.tsx` (*Contar vazios*, *Contar preenchidos*, *Percentual vazio*, *Percentual preenchido*).
+  * Placeholder do editor de blocos em `rootInput.tsx`: *"Insira seu texto ou comando"*.
+  * Adição de todas as novas chaves em `webapp/i18n/pt_BR.json` e `webapp/i18n/en.json`.
 
 ### `v1.0.2` — Localização Total de Modelos (Templates), Quadros e Barra Lateral em PT-BR
 * **Tradução Completa dos 13 Modelos Nativos (`templates-boardarchive`)**:
@@ -198,4 +219,4 @@ git config user.email "eduardo.azm@hotmail.com"
 
 ---
 
-*Documento atualizado em: 13 de Outubro de 2026 — Versão v1.0.2*
+*Documento atualizado em: 13 de Outubro de 2026 — Versão v1.0.3*
