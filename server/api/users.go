@@ -28,6 +28,7 @@ func (a *API) registerUsersRoutes(r *mux.Router) {
 	r.HandleFunc("/admin/users/{userID}", a.systemAdminRequired(a.handleAdminUpdateUser)).Methods(http.MethodPut)
 	r.HandleFunc("/admin/users/{userID}", a.systemAdminRequired(a.handleAdminDeleteUser)).Methods(http.MethodDelete)
 	r.HandleFunc("/admin/users/{userID}/password", a.systemAdminRequired(a.handleAdminResetPassword)).Methods(http.MethodPost)
+	r.HandleFunc("/admin/user_boards", a.systemAdminRequired(a.handleAdminGetBoardsList)).Methods(http.MethodGet)
 }
 
 func (a *API) handleGetUsersList(w http.ResponseWriter, r *http.Request) {
@@ -467,10 +468,12 @@ func (a *API) handleAdminGetUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 type AdminCreateUserRequest struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Roles    string `json:"roles"`
+	Username string   `json:"username"`
+	Email    string   `json:"email"`
+	Password string   `json:"password"`
+	Roles    string   `json:"roles"`
+	BoardID  string   `json:"board_id"`
+	BoardIDs []string `json:"board_ids"`
 }
 
 func (a *API) handleAdminCreateUser(w http.ResponseWriter, r *http.Request) {
@@ -491,6 +494,7 @@ func (a *API) handleAdminCreateUser(w http.ResponseWriter, r *http.Request) {
 
 	req.Username = strings.TrimSpace(req.Username)
 	req.Email = strings.TrimSpace(req.Email)
+	req.BoardID = strings.TrimSpace(req.BoardID)
 
 	if req.Username == "" {
 		a.errorResponse(w, r, model.NewErrBadRequest("username is required"))
@@ -502,6 +506,10 @@ func (a *API) handleAdminCreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(req.Password) < 6 {
 		a.errorResponse(w, r, model.NewErrBadRequest("password must be at least 6 characters"))
+		return
+	}
+	if req.BoardID == "" && len(req.BoardIDs) == 0 {
+		a.errorResponse(w, r, model.NewErrBadRequest("É obrigatório selecionar um quadro para compartilhar com o usuário"))
 		return
 	}
 
@@ -545,6 +553,41 @@ func (a *API) handleAdminCreateUser(w http.ResponseWriter, r *http.Request) {
 		createdUser.Roles = "member"
 	}
 
+	// Compartilhamento obrigatório do(s) quadro(s) selecionado(s) com o novo usuário
+	adminUserID := getUserID(r)
+	targetBoardIDs := []string{}
+	if len(req.BoardIDs) > 0 {
+		targetBoardIDs = req.BoardIDs
+	} else if req.BoardID != "" {
+		if req.BoardID == "all" {
+			boards, bErr := a.app.GetBoardsForUserAndTeam(adminUserID, "0", true)
+			if bErr == nil {
+				for _, b := range boards {
+					targetBoardIDs = append(targetBoardIDs, b.ID)
+				}
+			}
+		} else {
+			targetBoardIDs = append(targetBoardIDs, req.BoardID)
+		}
+	}
+
+	for _, bID := range targetBoardIDs {
+		if bID == "" {
+			continue
+		}
+		newBoardMember := &model.BoardMember{
+			BoardID:         bID,
+			UserID:          createdUser.ID,
+			SchemeAdmin:     req.Roles == "system_admin",
+			SchemeEditor:    true,
+			SchemeCommenter: true,
+			SchemeViewer:    true,
+		}
+		if _, err := a.app.AddMemberToBoard(newBoardMember); err != nil {
+			a.logger.Error("Failed to add new user to board", mlog.String("boardID", bID), mlog.String("userID", createdUser.ID), mlog.Err(err))
+		}
+	}
+
 	a.app.SanitizeProfile(createdUser, true)
 	userData, err := json.Marshal(createdUser)
 	if err != nil {
@@ -554,6 +597,44 @@ func (a *API) handleAdminCreateUser(w http.ResponseWriter, r *http.Request) {
 
 	jsonBytesResponse(w, http.StatusOK, userData)
 	auditRec.Success()
+}
+
+func (a *API) handleAdminGetBoardsList(w http.ResponseWriter, r *http.Request) {
+	adminUserID := getUserID(r)
+	boards, err := a.app.GetBoardsForUserAndTeam(adminUserID, "0", true)
+	if err != nil {
+		boards = []*model.Board{}
+	}
+
+	teams, err := a.app.GetTeamsForUser(adminUserID)
+	if err == nil {
+		boardIDsMap := make(map[string]bool)
+		for _, b := range boards {
+			boardIDsMap[b.ID] = true
+		}
+		for _, t := range teams {
+			if t.ID == "0" {
+				continue
+			}
+			teamBoards, tErr := a.app.GetBoardsForUserAndTeam(adminUserID, t.ID, true)
+			if tErr == nil {
+				for _, tb := range teamBoards {
+					if !boardIDsMap[tb.ID] {
+						boardIDsMap[tb.ID] = true
+						boards = append(boards, tb)
+					}
+				}
+			}
+		}
+	}
+
+	data, err := json.Marshal(boards)
+	if err != nil {
+		a.errorResponse(w, r, err)
+		return
+	}
+
+	jsonBytesResponse(w, http.StatusOK, data)
 }
 
 type AdminUpdateUserRequest struct {

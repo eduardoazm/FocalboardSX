@@ -259,7 +259,23 @@ class OctoClient {
         return (await this.getJson(response, [])) as IUser[]
     }
 
-    async adminCreateUser(user: {username: string, email: string, password: string, roles?: string}): Promise<{code: number, user?: IUser, error?: string}> {
+    async adminGetBoards(): Promise<Board[]> {
+        const path = '/api/v2/admin/user_boards'
+        try {
+            const response = await fetch(this.getBaseURL() + path, {
+                method: 'GET',
+                headers: this.headers(),
+            })
+            if (response.status === 200) {
+                return (await this.getJson(response, [])) as Board[]
+            }
+        } catch (e) {
+            // fallback below
+        }
+        return this.getBoards()
+    }
+
+    async adminCreateUser(user: {username: string, email: string, password: string, roles?: string, board_id?: string, board_ids?: string[]}): Promise<{code: number, user?: IUser, error?: string}> {
         const path = '/api/v2/admin/users'
         const body = JSON.stringify(user)
         const response = await fetch(this.getBaseURL() + path, {

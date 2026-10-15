@@ -11,23 +11,34 @@ import CompassIcon from '../widgets/icons/compassIcon'
 import SearchIcon from '../widgets/icons/search'
 import client from '../octoClient'
 import {IUser} from '../user'
+import {Board} from '../blocks/board'
 import {useAppSelector} from '../store/hooks'
 import {getMe} from '../store/users'
+import {getMySortedBoards} from '../store/boards'
 
 import './adminUsersPage.scss'
 
 const AdminUsersPage: React.FC = () => {
     const history = useHistory()
     const me = useAppSelector<IUser | null>(getMe)
+    const reduxBoards = useAppSelector(getMySortedBoards)
 
     const [users, setUsers] = useState<IUser[]>([])
     const [loading, setLoading] = useState(true)
+    const [fetchedBoards, setFetchedBoards] = useState<Board[]>([])
     const [searchTerm, setSearchTerm] = useState('')
     const [feedback, setFeedback] = useState<{type: 'success' | 'error', text: string} | null>(null)
 
+    const availableBoards = useMemo(() => {
+        if (fetchedBoards.length > 0) {
+            return fetchedBoards
+        }
+        return reduxBoards || []
+    }, [fetchedBoards, reduxBoards])
+
     // Modal states
     const [showCreateModal, setShowCreateModal] = useState(false)
-    const [createForm, setCreateForm] = useState({username: '', email: '', password: '', roles: 'member'})
+    const [createForm, setCreateForm] = useState({username: '', email: '', password: '', roles: 'member', boardId: ''})
     const [createError, setCreateError] = useState('')
     const [createSubmitting, setCreateSubmitting] = useState(false)
 
@@ -65,11 +76,24 @@ const AdminUsersPage: React.FC = () => {
         }
     }, [])
 
+    const loadBoardsList = useCallback(async () => {
+        try {
+            const list = await client.adminGetBoards()
+            if (list && list.length > 0) {
+                setFetchedBoards(list)
+                setCreateForm((prev) => ({...prev, boardId: prev.boardId || list[0].id}))
+            }
+        } catch (e) {
+            // fallback gracefully
+        }
+    }, [])
+
     useEffect(() => {
         if (isAdmin) {
             loadUsers()
+            loadBoardsList()
         }
-    }, [isAdmin, loadUsers])
+    }, [isAdmin, loadUsers, loadBoardsList])
 
     const filteredUsers = useMemo(() => {
         if (!searchTerm.trim()) {
@@ -84,7 +108,14 @@ const AdminUsersPage: React.FC = () => {
 
     // Handlers
     const handleOpenCreateModal = () => {
-        setCreateForm({username: '', email: '', password: '', roles: 'member'})
+        const defaultBoardId = availableBoards.length > 0 ? availableBoards[0].id : ''
+        setCreateForm({
+            username: '',
+            email: '',
+            password: '',
+            roles: 'member',
+            boardId: defaultBoardId,
+        })
         setCreateError('')
         setShowCreateModal(true)
     }
@@ -104,6 +135,10 @@ const AdminUsersPage: React.FC = () => {
             setCreateError('A senha deve ter pelo menos 6 caracteres.')
             return
         }
+        if (!createForm.boardId) {
+            setCreateError('É obrigatório selecionar um quadro para compartilhar com o usuário.')
+            return
+        }
 
         setCreateSubmitting(true)
         try {
@@ -112,6 +147,7 @@ const AdminUsersPage: React.FC = () => {
                 email: createForm.email.trim(),
                 password: createForm.password,
                 roles: createForm.roles,
+                board_id: createForm.boardId,
             })
             if (res.code === 200) {
                 setShowCreateModal(false)
@@ -360,14 +396,12 @@ const AdminUsersPage: React.FC = () => {
                                         <tr key={u.id}>
                                             <td>
                                                 <div className='user-cell'>
-                                                    <div className={`user-avatar ${isUserAdmin ? 'admin-avatar' : ''}`}>
+                                                    <div className='user-avatar'>
                                                         {initial}
                                                     </div>
                                                     <div className='user-details'>
                                                         <div className='username-wrapper'>
                                                             <span className='username-text'>{u.username}</span>
-                                                            {isCurrentUser && <span className='badge-you'>Você</span>}
-                                                            {isRootAdmin && <span className='badge-root'>Root</span>}
                                                         </div>
                                                         <span className='user-id-sub'>{u.id}</span>
                                                     </div>
@@ -376,10 +410,8 @@ const AdminUsersPage: React.FC = () => {
                                             <td className='email-cell'>
                                                 {u.email || '-'}
                                             </td>
-                                            <td>
-                                                <span className={`role-badge ${isUserAdmin ? 'admin' : 'member'}`}>
-                                                    {isUserAdmin ? 'Administrador' : 'Membro'}
-                                                </span>
+                                            <td className='role-cell'>
+                                                {isUserAdmin ? 'Administrador' : 'Membro'}
                                             </td>
                                             <td className='date-cell'>
                                                 {formattedDate}
@@ -487,6 +519,33 @@ const AdminUsersPage: React.FC = () => {
                             >
                                 <option value='member'>Membro (Acesso aos quadros atribuídos)</option>
                                 <option value='system_admin'>Administrador do Sistema (Acesso total)</option>
+                            </select>
+                        </div>
+
+                        <div className='form-group'>
+                            <label htmlFor='create-board'>
+                                Quadro Inicial Compartilhado <span className='required-star'>*</span>
+                            </label>
+                            <select
+                                id='create-board'
+                                required={true}
+                                value={createForm.boardId}
+                                onChange={(e) => setCreateForm({...createForm, boardId: e.target.value})}
+                            >
+                                {availableBoards.length === 0 ? (
+                                    <option value=''>Nenhum quadro encontrado</option>
+                                ) : (
+                                    <>
+                                        {availableBoards.length > 1 && (
+                                            <option value='all'>Compartilhar Todos os Quadros ({availableBoards.length})</option>
+                                        )}
+                                        {availableBoards.map((b) => (
+                                            <option key={b.id} value={b.id}>
+                                                {b.title || 'Quadro sem título'}
+                                            </option>
+                                        ))}
+                                    </>
+                                )}
                             </select>
                         </div>
 
