@@ -21,8 +21,8 @@ FROM golang:1.21-bookworm AS gobuild
 WORKDIR /go/src/focalboard
 COPY . /go/src/focalboard
 
-ARG TARGETOS=linux
-ARG TARGETARCH=amd64
+ARG TARGETOS
+ARG TARGETARCH
 
 RUN apt-get update && apt-get install -y --no-install-recommends gcc libc6-dev make && rm -rf /var/lib/apt/lists/*
 

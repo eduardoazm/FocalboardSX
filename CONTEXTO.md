@@ -234,6 +234,5 @@ git config user.name "eduardoazm"
 git config user.email "eduardo.azm@hotmail.com"
 ```
 
----
+*Documento atualizado em: 15 de Outubro de 2026 — Versão v1.0.4 (Suporte ARM64 Oracle Cloud, Compartilhamento Obrigatório de Quadros)*
 
-*Documento atualizado em: 13 de Outubro de 2026 — Versão v1.0.3*
