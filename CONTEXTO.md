@@ -13,8 +13,8 @@
 * **Nome do Projeto**: FocalboardSX (Sistema Integrado de Gestão de Quadros, Tarefas e Projetos)
 * **Repositório Git**: `https://github.com/eduardoazm/FocalboardSX.git`
 * **Imagem Docker Pré-compilada**: `ghcr.io/eduardoazm/focalboardsx:latest`
-* **Versão Atual**: `v1.0.3`
-* **Tecnologias Principais**: Go 1.20 (Backend HTTP/WebSocket REST), React 17, TypeScript 4, Redux Toolkit, SCSS, SQLite3 (nativo em `/opt/focalboard/data`) / PostgreSQL opcional, Docker (Multi-stage build), GitHub Actions CI/CD (GHCR), Portainer.
+* **Versão Atual**: `v1.0.4`
+* **Tecnologias Principais**: Go 1.21 (Backend HTTP/WebSocket REST), React 17, TypeScript 4, Redux Toolkit, SCSS, SQLite3 (nativo em `/opt/focalboard/data`) / PostgreSQL opcional, Docker (Multi-stage build com suporte multi-arquitetura amd64 e arm64), GitHub Actions CI/CD (GHCR), Portainer.
 
 ### Propósito & Escopo de Negócio
 O **FocalboardSX** é uma solução corporativa self-hosted para gestão visual de tarefas, quadros kanban, tabelas, galerias e calendários (alternativa ao Trello, Notion e Asana). 
@@ -24,11 +24,28 @@ Diferenciais e melhorias implementadas:
 * **Usuário Administrador Nativo**: Criação automática do administrador padrão (`admin` / `admin123`) na inicialização do servidor.
 * **Controle Estrito de Acesso (RBAC)**: Middleware de segurança no backend (`systemAdminRequired`) bloqueando qualquer acesso não autorizado com HTTP 403 Forbidden.
 * **Painel de Gestão de Usuários Exclusivo (`/admin/users`)**: Tela administrativa com CRUD completo para gerenciar todos os usuários cadastrados (criar, editar, redefinir senhas e excluir contas).
+* **Compatibilidade Multi-Arquitetura (amd64 e arm64)**: Imagem Docker compilada para servidores x86/amd64 e processadores ARM64 (Oracle Cloud Ampere A1, Raspberry Pi, AWS Graviton, Apple Silicon).
 * **Compilação Automatizada no GitHub Actions**: Build em nuvem e publicação no GitHub Container Registry (`ghcr.io`), permitindo **deploy instantâneo no Portainer** em poucos segundos via `docker-compose.yml`, sem sobrecarregar a CPU ou memória do servidor.
 
 ---
 
 ## 🕒 2. Histórico Completo de Versões e Evolução do Projeto
+
+### `v1.0.4` — Compartilhamento Obrigatório de Quadros, UI Limpa e Suporte Multi-Arquitetura (ARM64 / AMD64)
+* **Compartilhamento Obrigatório de Quadro na Criação de Usuários**:
+  * Adicionado campo obrigatório de seleção de quadro (*Quadro Inicial Compartilhado \**) no modal de cadastro de novo usuário.
+  * O backend Go vincula automaticamente o novo usuário como membro ativo do quadro selecionado (`AddMemberToBoard`) e insere o quadro na categoria padrão da barra lateral, impedindo que novos usuários fiquem presos na tela vazia *"Nenhum quadro ainda"*.
+  * Nova rota administrativa `GET /api/v2/admin/user_boards` para listar quadros disponíveis.
+* **Estilização Limpa da Tabela de Usuários**:
+  * Removidas as nomenclaturas e etiquetas visuais `Root` e `Você`.
+  * Avatar com cores neutras e suaves integradas ao tema, sem gradientes fortes.
+  * Coluna Função (`role-cell`) simplificada para texto puro legível (`Administrador` / `Membro`), removendo pills, molduras e cores chamativas.
+* **Suporte Multi-Arquitetura Docker (ARM64 e AMD64)**:
+  * Adicionado `docker/setup-qemu-action@v3` no fluxo do GitHub Actions (`docker-build.yml`).
+  * Definido `platforms: linux/amd64,linux/arm64` no `build-push-action`, gerando manifesto multi-arch nativo compatível com VPS Oracle Cloud (processadores ARM64 Ampere) e servidores convencionais AMD64/x86.
+  * Otimizado o estágio `nodebuild` no `Dockerfile` com `--platform=$BUILDPLATFORM` para compilação nativa ultra-rápida do frontend webapp.
+* **Sincronização Rigorosa do Número de Versão**:
+  * Atualizados `webapp/src/constants.ts` (`versionString = '1.0.4'`), `server/model/version.go` (`CurrentVersion = "1.0.4"`), `webapp/package.json` (`1.0.4`) e tag git `v1.0.4`.
 
 ### `v1.0.3` — Correção de Contraste no Campo Assignee e Localização Dinâmica de Propriedades e Placeholders para PT-BR
 * **Correção de Contraste do Campo Assignee (PersonSelector) no Tema Escuro**:

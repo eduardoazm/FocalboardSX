@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ### 1. Build Webapp
-FROM node:18-bookworm AS nodebuild
+FROM --platform=$BUILDPLATFORM node:18-bookworm AS nodebuild
 
 WORKDIR /webapp
 
